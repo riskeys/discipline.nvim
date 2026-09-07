@@ -38,7 +38,7 @@ end
 
 M.open_daily_local_btm = function()
 	local buf_daily = local_scratch.get_scratch_daily_buf()
-	toggle_btm(buf_daily)
+	toggle_top(buf_daily)
 end
 
 M.open_daily_local_top = function()
