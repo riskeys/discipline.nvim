@@ -200,8 +200,6 @@ M.setup = function(config)
 		)
 	end
 
-	set_keymap()
-
 	vim.api.nvim_create_autocmd('SwapExists', {
 		callback = function(args)
 			print("SwapExists autocmd triggered for file: " .. args.file)

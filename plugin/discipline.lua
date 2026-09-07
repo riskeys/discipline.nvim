@@ -21,7 +21,7 @@ local function set_keymap()
 	vim.keymap.set("n", "\\x", dc.wnd_close_window, { desc = "Close floating window" })
 	vim.keymap.set("n", "\\q", dc.wnd_close_window_top, { desc = "Close floating window" })
 	vim.keymap.set("n", "\\w", dc.wnd_switch_window, { desc = "Switch window" })
-	vim.keymap.set("n", "\\g", dc.dc_scratch_open_git, { desc = "Close floating window" })
+	vim.keymap.set("n", "\\g", dc.scratch_open_git, { desc = "Close floating window" })
 end
 
 local opts = {
