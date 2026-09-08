@@ -1,12 +1,18 @@
-print("asde")
 local M = {}
+local DAY_IN_SECONDS = 86400
 
 local repo = "/Documents/repos/discipline"
 
 local function get_scratch_daily_path()
 	local today = os.date("%Y-%m-%d")
-	print("/scratch/daily/scratch_" .. today .. ".md")
+
 	return vim.fn.expand("$HOME") .. repo .. "/scratch/daily/scratch_" .. today .. ".md"
+end
+
+local function get_scratch_daily_yesterday_path()
+	local target_date = os.date("%Y-%m-%d", os.time() - DAY_IN_SECONDS)
+
+	return vim.fn.expand("$HOME") .. repo .. "/scratch/daily/scratch_" .. target_date .. ".md"
 end
 
 local function get_scratch_path()
@@ -39,15 +45,27 @@ end
 --- @type integer|nil
 M.buf_daily = nil
 --- @type integer|nil
+M.buf_daily_yesterday = nil
+--- @type integer|nil
 M.buf_reminder = nil
 --- @type integer|nil
 M.buf_scratch = nil
+-- --- @type integer
+-- M.daily_index = 0
+M.bufs = {}
 
 M.get_scratch_daily_buf = function()
 	if M.buf_daily == nil or not vim.api.nvim_buf_is_valid(M.buf_daily) then
 		M.buf_daily = vim.fn.bufadd(get_scratch_daily_path())
 	end
 	return M.buf_daily
+end
+
+M.get_scratch_daily_yesterday_buf = function()
+	if M.buf_daily_yesterday == nil or not vim.api.nvim_buf_is_valid(M.buf_daily_yesterday) then
+		M.buf_daily_yesterday = vim.fn.bufadd(get_scratch_daily_yesterday_path())
+	end
+	return M.buf_daily_yesterday
 end
 
 M.get_scratch_buf = function()

@@ -1,4 +1,5 @@
 local M = {}
+local DAY_IN_SECONDS = 86400
 
 local local_scratch_subdir = ""
 local local_reminder_subdir = ""
@@ -27,6 +28,11 @@ local function get_scratch_daily_path()
 	return local_scratch_dir .. local_daily_subdir .. "/scratch_" .. today .. ".md"
 end
 
+local function get_scratch_daily_yesterday_path()
+	local target_date = os.date("%Y-%m-%d", os.time() - DAY_IN_SECONDS)
+	return local_scratch_dir .. local_daily_subdir .. "/scratch_" .. target_date .. ".md"
+end
+
 local function get_scratch_path()
 	return local_scratch_dir .. local_scratch_subdir .. "/scratch.md"
 end
@@ -41,6 +47,8 @@ end
 
 --- @type integer|nil
 M.buf_daily = nil
+--- @type integer|nil
+M.buf_daily_yesterday = nil
 --- @type integer|nil
 M.buf_reminder = nil
 --- @type integer|nil
@@ -59,6 +67,14 @@ M.get_scratch_daily_buf = function()
 	end
 
 	return M.buf_daily
+end
+
+M.get_scratch_daily_yesterday_buf = function()
+	if M.buf_daily_yesterday == nil or not vim.api.nvim_buf_is_valid(M.buf_daily_yesterday) then
+		M.buf_daily_yesterday = vim.fn.bufadd(get_scratch_daily_yesterday_path())
+	end
+
+	return M.buf_daily_yesterday
 end
 
 M.get_scratch_buf = function()

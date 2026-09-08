@@ -28,12 +28,15 @@ local function set_keymap()
 
 	vim.keymap.set("n", "\\lr", M.open_local_reminder, { desc = "Discipline: (Local) Reminder" })
 	vim.keymap.set("n", "\\ls", M.open_local_scratch_top, { desc = "Discipline: (Local) Scratch" })
-	vim.keymap.set("n", "\\ld", M.open_daily_local_btm, { desc = "Discipline: (Local) Scratch daily" })
+	vim.keymap.set("n", "\\ld", M.open_daily_local_top, { desc = "Discipline: (Local) Scratch daily" })
+	vim.keymap.set("n", "\\ly", M.open_daily_local_yest_top, { desc = "Discipline: (Local) Scratch daily yest" })
 	vim.keymap.set("n", "\\ll", M.open_praytell, { desc = "Discipline: Praytell" })
 	vim.keymap.set("n", "\\ln", M.open_current_repo_notes, { desc = "Discipline: (Local) Repo Notes" })
+
 	vim.keymap.set("n", "\\dr", M.open_reminder_btm, { desc = "Discipline: Reminder" })
 	vim.keymap.set("n", "\\ds", M.open_scratch_top, { desc = "Discipline: Scratch" })
 	vim.keymap.set("n", "\\dd", M.open_scratch_daily, { desc = "Discipline: Scratch daily" })
+	vim.keymap.set("n", "\\dy", M.open_scratch_daily_yesterday, { desc = "Discipline: Scratch daily yest" })
 
 	vim.keymap.set("n", "\\x", M.wnd_close_window, { desc = "Close floating window" })
 	vim.keymap.set("n", "\\q", M.wnd_close_window_top, { desc = "Close floating window" })

@@ -40,12 +40,17 @@ end
 
 M.open_daily_local_btm = function()
 	local buf_daily = locald.get_scratch_daily_buf()
-	toggle_top(buf_daily)
+	toggle_btm(buf_daily)
 end
 
 M.open_daily_local_top = function()
 	local buf_daily = locald.get_scratch_daily_buf()
 	toggle_top(buf_daily)
+end
+
+M.open_daily_local_yest_top = function()
+	local buf = locald.get_scratch_daily_yesterday_buf()
+	toggle_top(buf)
 end
 
 M.open_random_buffer_test = function()
@@ -65,6 +70,11 @@ end
 
 M.open_scratch_daily = function()
 	local buf = remote.get_scratch_daily_buf()
+	toggle_top(buf)
+end
+
+M.open_scratch_daily_yesterday = function()
+	local buf = remote.get_scratch_daily_yesterday_buf()
 	toggle_top(buf)
 end
 
