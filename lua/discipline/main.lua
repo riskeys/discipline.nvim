@@ -19,7 +19,9 @@ end
 local M = {}
 
 M.set_repo_notes_path = local_scratch.set_notes_path
-M.set_local_subdir = local_scratch.set_local_subdir
+M.set_local_scratch_subdir = local_scratch.set_local_scratch_subdir
+M.set_local_reminder_subdir = local_scratch.set_local_reminder_subdir
+M.set_local_daily_subdir = local_scratch.set_local_daily_subdir
 
 M.open_reminder_top = function()
 	local buf_reminder = dc_scratch.get_reminder_buf()
@@ -38,7 +40,7 @@ end
 
 M.open_daily_local_btm = function()
 	local buf_daily = local_scratch.get_scratch_daily_buf()
-	toggle_btm(buf_daily)
+	toggle_top(buf_daily)
 end
 
 M.open_daily_local_top = function()
@@ -86,27 +88,12 @@ M.open_current_repo_notes = function()
 	toggle_top(buf)
 end
 
-local function set_keymap()
-	vim.keymap.set("n", "\\n", ":CuzNotesPath ", { desc = "Set notes path" })
-
-	vim.keymap.set("n", "\\lr", M.open_local_reminder, { desc = "Discipline: (Local) Reminder" })
-	vim.keymap.set("n", "\\ls", M.open_local_scratch_top, { desc = "Discipline: (Local) Scratch" })
-	vim.keymap.set("n", "\\ld", M.open_daily_local_btm, { desc = "Discipline: (Local) Scratch daily" })
-	vim.keymap.set("n", "\\ll", M.open_praytell, { desc = "Discipline: Praytell" })
-	vim.keymap.set("n", "\\ln", M.open_current_repo_notes, { desc = "Discipline: (Local) Repo Notes" })
-
-	vim.keymap.set("n", "\\dr", M.open_reminder_btm, { desc = "Discipline: Reminder" })
-	vim.keymap.set("n", "\\ds", M.open_scratch_top, { desc = "Discipline: Scratch" })
-	vim.keymap.set("n", "\\dd", M.open_scratch_daily, { desc = "Discipline: Scratch daily" })
-
-	vim.keymap.set("n", "\\\\b", wnd.toggle_float_btm, { desc = "Close floating window" })
-	vim.keymap.set("n", "\\\\t", wnd.toggle_float_top, { desc = "Close floating window" })
-
-	vim.keymap.set("n", "\\x", wnd.close_window, { desc = "Close floating window" })
-	vim.keymap.set("n", "\\q", wnd.close_window_top, { desc = "Close floating window" })
-	vim.keymap.set("n", "\\w", wnd.switch_window, { desc = "Switch window" })
-	vim.keymap.set("n", "\\g", dc_scratch.open_git, { desc = "Close floating window" })
-end
+M.wnd_toggle_float_btm = wnd.toggle_float_btm
+M.wnd_toggle_float_top = wnd.toggle_float_top
+M.wnd_close_window = wnd.close_window
+M.wnd_close_window_top = wnd.close_window_top
+M.scratch_open_git = dc_scratch.open_git
+M.wnd_switch_window = wnd.switch_window
 
 M.arg_handler = function(opts)
 	if not opts.args or opts.args == "" then
@@ -189,44 +176,5 @@ M.discipline_complete = function(arg_lead, cmd_line, cursor_pos)
 	end
 	return matches
 end
-
-
---- @param config table|nil
-M.setup = function(config)
-	print("setting up discipline")
-	vim.api.nvim_create_user_command("CuzNotesPath", function(opts)
-		M.set_repo_notes_path(opts.args)
-	end, { nargs = 1, complete = "file", desc = "Set note path" })
-
-	if config and config.local_subdir then
-		local_scratch.set_local_subdir(config.local_subdir)
-	end
-
-	if config ~= nil and config.notes_path ~= nil then
-		M.set_repo_notes_path(config.notes_path)
-	end
-
-	local function is_scratch_note(path)
-		local scratch_dir = vim.fn.expand("$HOME/scratch")
-
-		return vim.startswith(
-			vim.fn.fnamemodify(path, ":p"),
-			vim.fn.fnamemodify(scratch_dir, ":p")
-		)
-	end
-
-	set_keymap()
-
-	vim.api.nvim_create_autocmd('SwapExists', {
-		callback = function(args)
-			print("SwapExists autocmd triggered for file: " .. args.file)
-			-- vim.v.swapchoice = "o"
-			if is_scratch_note(args.file) then
-				vim.v.swapchoice = "o"
-			end
-		end,
-	})
-end
-
 
 return M
