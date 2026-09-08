@@ -1,33 +1,42 @@
 local M = {}
 
---- @type string
-M.local_subdir = "/personal"
+local local_scratch_subdir = ""
+local local_reminder_subdir = ""
+local local_daily_subdir = "/daily"
+local notes_path = "notes/main.md"
 
---- @type string
-M.notes_path = "notes/main.md"
+local local_scratch_dir = vim.fn.expand("$HOME") .. "/scratch"
 
 --- @param subdir string
-M.set_local_subdir = function(subdir)
-	M.local_subdir = subdir
+M.set_local_scratch_subdir = function(subdir)
+	local_scratch_subdir = subdir
 end
 
-local LOCAL_SCRATCH_DIR = vim.fn.expand("$HOME") .. "/scratch"
+--- @param subdir string
+M.set_local_reminder_subdir = function(subdir)
+	local_reminder_subdir = subdir
+end
+
+--- @param subdir string
+M.set_local_daily_subdir = function(subdir)
+	local_daily_subdir = subdir
+end
 
 local function get_scratch_daily_path()
 	local today = os.date("%Y-%m-%d")
-	return LOCAL_SCRATCH_DIR .. "/daily/scratch_" .. today .. ".md"
+	return local_scratch_dir .. local_daily_subdir .. "/scratch_" .. today .. ".md"
 end
 
 local function get_scratch_path()
-	return LOCAL_SCRATCH_DIR .. M.local_subdir .. "/scratch.md"
+	return local_scratch_dir .. local_scratch_subdir .. "/scratch.md"
 end
 
 local function get_reminder_path()
-	return LOCAL_SCRATCH_DIR .. M.local_subdir .. "/reminder.md"
+	return local_scratch_dir .. local_reminder_subdir .. "/reminder.md"
 end
 
 local function get_repo_notes_path()
-	return M.notes_path
+	return notes_path
 end
 
 --- @type integer|nil
@@ -41,7 +50,7 @@ M.buf_notes = nil
 
 --- @param path string
 M.set_notes_path = function(path)
-	M.notes_path = path
+	notes_path = path
 end
 
 M.get_scratch_daily_buf = function()
